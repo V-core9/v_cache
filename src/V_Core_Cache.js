@@ -2,6 +2,8 @@ import { isEmpty } from 'v_is_empty_value'
 import { EventEmitter } from 'events'
 import { isAlive, defineExpire, Add_Listener, Remove_Listener, Prepend_Listener, makeEvHandler } from './utils'
 
+const encodedStringSize = (encString) => new TextEncoder().encode(encString).length
+
 export class V_Core_Cache {
   constructor(init = {}) {
     // super();
@@ -17,7 +19,7 @@ export class V_Core_Cache {
     let defExp = defineExpire(init.expires) ? init.expires : null
     let $ = new Map()
 
-    this.entries =  $.entries
+    this.entries = $.entries
     this.keys = () => $.keys()
     this.values = () => $.values()
     this.del = (key) => $.delete(key)
@@ -88,7 +90,7 @@ export class V_Core_Cache {
       return affected
     }
 
-    this.size = () => new TextEncoder().encode(JSON.stringify(Array.from($.entries()))).length
+    this.size = () => encodedStringSize(JSON.stringify($.entries()))
 
     this.stats = () => ({
       hits: hits,
